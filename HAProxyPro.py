@@ -3,7 +3,7 @@ import os
 from urllib import urlopen
 from datetime import date, datetime
 
-class HAProxy_test:
+class HAProxyPro:
   def __init__( self, agentConfig, logger, rawConfig ):
     logger.debug("HAProxy - initializing")
     self.agent_config = agentConfig
