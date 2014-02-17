@@ -34,24 +34,24 @@ class HAProxy_test:
     self.status_page_url = self.raw_config['Main']['haproxy_url'] + "/;csv;norefresh"
     self.getStatusPage()
     self.logger.info("HAProxy - status page")
-    self.logger.info(self.raw_status)
     self.parseStatusPage()
-    self.logger.info("HAProxy - parsed status page")
-    self.logger.info(self.parsed_status)
 
   def getStatusPage( self ):
     response = urlopen(self.status_page_url).read()
     self.raw_status = response[2:]
-    f = open( self.csv_filepath, 'w')
-    f.write(self.raw_status)
 
   def parseStatusPage( self ):
     self.parsed_status = []
-    with open( self.csv_filepath, 'rb') as f:
-      reader = csv.DictReader(f)
 
-      for row in reader:
-        self.parsed_status.append(row)
+    reader = csv.DictReader( self.raw_status.split('\n'), delimiter=',' )
+    for row in reader:
+      self.parsed_status.append(row)
+
+    self.createKeyedStatus()
+
+  def createKeyedStatus( self ):
+    for server in self.parsed_status:
+      self.logger.info("HAProxy - Server found: "+ server['svname'] )
 
   def clean_url( self ):
     return
