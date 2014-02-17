@@ -1,4 +1,4 @@
-sd-haproxy
+HAProxyPro
 ==========
 
 HAProxy monitoring plugin for ServerDensity
