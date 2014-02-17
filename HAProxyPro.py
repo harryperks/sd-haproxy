@@ -41,6 +41,8 @@ class HAProxyPro:
     self.getStatusPage()
     self.logger.debug("HAProxy - status page")
     self.parseStatusPage()
+    self.createKeyedStatus()
+    return self.parseTotals()
 
   def getStatusPage( self ):
     response = urlopen(self.status_page_url).read()
@@ -55,8 +57,6 @@ class HAProxyPro:
       self.parsed_status.append(row)
       f.write("%s\n" % row)
 
-    self.createKeyedStatus()
-    self.parseTotals()
 
   def createKeyedStatus( self ):
     self.servers = {}
@@ -117,7 +117,7 @@ class HAProxyPro:
 
     self.logger.debug("HAProxy - stats totals")
     self.logger.debug(totals)
-    self.totals = totals
+    return totals
 
   def clean_url( self ):
     return
@@ -129,8 +129,7 @@ class HAProxyPro:
 
     try:
       self.logger.debug("HAProxy - running main()")
-      self.main()
-      return self.totals
+      return self.main()
     except Exception, e:
       import traceback
       self.logger.error('HAProxy - failure \n'+ traceback.format_exc())
